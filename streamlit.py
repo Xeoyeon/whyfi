@@ -1,27 +1,27 @@
-from agent import RAGAgent
+from agent import agents
+from utils import web_search_tools
 import streamlit as st
+from dotenv import load_dotenv
 
-def whyfi_search_word(question) :
-    template = """
-    <|system|>
-    You are a helpful assistant.<|end|>
-    <|user|>
-    {question}<|end|>
-    <|assistant|>
-    """
-    agent = RAGAgent(prompt_template=template)
-    result = agent.invoke(question)
-    return result
+load_dotenv()
+
+def get_response(query) :
+    agent = agents['RAG']
+    return agent.invoke(query)
     
+def stream_response(query) :
+    agent = agents['RAG']
+    return agent.stream(query)
+ 
 def main():
     st.title("와이파이(WhyFi) : 금융 용어 알리미")
 
-    question = st.text_input("궁금한 금융 용어를 입력해주세요")
+    query = st.text_input("궁금한 금융 용어를 입력해주세요")
     result = None
     # 그래프 invoke를 실행하는 버튼
-    if st.button("Search"):
+    if st.button("검색"):
         try:
-            result = whyfi_search_word(question=question)
+            result = get_response(query=query)
         except Exception as e:
             st.error(f"An error occurred while Invoking the RAG agent: {str(e)}")
             st.stop()
@@ -29,6 +29,23 @@ def main():
     # 그래프 최종 출력이 존재할 경우에만 실행
     if result is not None:
         placeholder.markdown(result)
+    # st.json(web_search_tools['serper'].run(query))
+
+def stream():
+    st.title("와이파이(WhyFi) : 금융 용어 알리미")
+
+    query = st.text_input("궁금한 금융 용어를 입력해주세요")
+    # 그래프 invoke를 실행하는 버튼
+    if st.button("검색"):
+        try:
+            st.write_stream(stream_response(query=query))
+            # st.json(web_search_tools['serper'].run(query))
+
+        except Exception as e:
+            st.error(f"An error occurred while Invoking the RAG agent: {str(e)}")
+            st.stop()
+
+
 
 if __name__ == "__main__":
-    main()
+    stream()
