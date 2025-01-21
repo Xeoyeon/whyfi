@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .  # Dockerfile이 있는 경로
+    container_name: whyfi-app
+    ports:
+      - "8000:8000"  # 외부에서 8000번 포트로 접근 가능
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}  # Google API Key
+      # - TAVILY_API_KEY=${TAVILY_API_KEY}  # Tavily API Key
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}  # Langchain API Key
+      - HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}  # Huggingface API Key
+    volumes:
+      - .:/app  # 소스 파일을 마운트
