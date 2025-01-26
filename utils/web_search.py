@@ -1,6 +1,6 @@
+from dotenv import load_dotenv
 from langchain_community.tools import TavilySearchResults
 from langchain_community.utilities import GoogleSerperAPIWrapper
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -39,7 +39,7 @@ class Serper(WebSearch):
     def run(self, query):
         return self.search_api.results(query)
 
-web_search_tools = {
+web_search_api = {
     "tavily": Tavily(),
     "serper": Serper(),
 }

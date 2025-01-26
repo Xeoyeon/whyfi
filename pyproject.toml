@@ -23,6 +23,9 @@ pydantic = "^2.10.5"
 uvicorn = "^0.34.0"
 streamlit = "^1.41.1"
 tavily-python = "^0.5.0"
+pymilvus = {extras = ["model"], version = "^2.5.3"}
+langchain-milvus = "^0.1.8"
+nltk = "^3.9.1"
 
 
 [tool.poetry.group.dev.dependencies]

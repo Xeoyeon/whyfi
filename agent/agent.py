@@ -1,10 +1,11 @@
-from db import CustomChroma
-from .prompt import prompt_templates
+from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_google_genai import ChatGoogleGenerativeAI
-from dotenv import load_dotenv
+
+from .prompt import prompt_templates
+from .tool import tools
 
 load_dotenv()
 
@@ -30,11 +31,8 @@ class BasicAgent:
 class RAGAgent(BasicAgent):
     def __init__(self):
         super().__init__()
-        chroma = CustomChroma()
-        vectorstore = chroma.vector_store
-        self.retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 5})
+        self.retriever = tools['basic_retriever']
         self.prompt = PromptTemplate.from_template(prompt_templates['context_template'])
-
         self.rag_chain = (
             {"context": self.retriever | self.format_docs, "question": RunnablePassthrough()}
             | self.prompt
@@ -44,8 +42,13 @@ class RAGAgent(BasicAgent):
 
     def format_docs(self, docs):
         return "\n\n### ".join(doc.page_content for doc in docs).replace("-----", "")
-    
+
+class MatryshkaHybridRAGAgent(RAGAgent):
+    def __init__(self):
+        super().__init__()
+
 agents = {
     "basic": BasicAgent(),
-    "RAG": RAGAgent()
+    "RAG": RAGAgent(),
+    "AdvancedRAG": MatryshkaHybridRAGAgent()
 }
