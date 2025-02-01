@@ -1,7 +1,0 @@
-google-generativeai==0.8.3
-langchain==0.3.14
-langchain-chroma==0.1.4
-langchain-google-genai==2.0.8
-langchain-huggingface==0.1.2
-langchain-core==0.3.29
-streamlit==1.41.1
