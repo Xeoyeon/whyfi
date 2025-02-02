@@ -1,5 +1,5 @@
 from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
 class ChromaDB:
     def __init__(self):

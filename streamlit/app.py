@@ -1,7 +1,8 @@
-import streamlit as st
 from core import agent, fetch_naver_news
 
+import streamlit as st
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Streamlit UI
@@ -25,8 +26,11 @@ if term:
     if not news_results:
         st.write("❌ 관련 뉴스를 찾을 수 없습니다.")
     else:
-        for news in news_results.split("\n"):
-            st.markdown(news)
+        for news in news_results.split("\n"): 
+            title, url = news.split("(http")
+            title = title.replace("[", "\[").replace("]", "\]").replace("- ", "")
+            news = f'<p><a href="http{url[:-1]}" style="color: gray;">{title}</a></p>'
+            st.markdown(news, unsafe_allow_html=True)
 
 else:
     st.info("🔍 금융 용어를 입력하세요!")

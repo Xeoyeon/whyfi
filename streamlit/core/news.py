@@ -1,6 +1,7 @@
 import os
-import requests
 import random
+
+import requests
 
 # Function to fetch news from Naver API
 def fetch_naver_news(query):

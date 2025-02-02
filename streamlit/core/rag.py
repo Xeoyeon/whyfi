@@ -1,11 +1,12 @@
-from dotenv import load_dotenv
-load_dotenv()
-from langchain_google_genai import ChatGoogleGenerativeAI
+from db import db
+
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
 
-from db import db
+load_dotenv()
 
 class RAGAgent:
     def __init__(self):
@@ -30,15 +31,15 @@ class RAGAgent:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
         self.chain = (
             {
-                "context": retriever | format_retriever_output,
+                "context": retriever | self.format_retriever_output,
                 "term": RunnablePassthrough(),
             }
             | prompt
             | llm 
             | StrOutputParser()
         )
-        def format_retriever_output(docs):
-            return "\n".join([doc.page_content for doc in docs])
+    def format_retriever_output(self, docs):
+        return "\n".join([doc.page_content for doc in docs])
         
     def invoke(self, user_input):
         return self.chain.invoke(user_input)
