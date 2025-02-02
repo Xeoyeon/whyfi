@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+import random
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.vectorstores import Chroma
@@ -25,16 +26,17 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
 
-# 네이버 뉴스 검색
+# Function to fetch news from Naver API
 def fetch_naver_news(query):
     client_id = os.getenv("NAVER_CLIENT_ID")
     client_secret = os.getenv("NAVER_CLIENT_SECRET")
-    url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display=3&sort=sim"
+    url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display=50&start=2&sort=sim"
     headers = {"X-Naver-Client-Id": client_id, "X-Naver-Client-Secret": client_secret}
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.json().get("items", [])
+        items = response.json().get("items", [])
+        return random.sample(items, min(3, len(items)))
     return []
 
 # Template
@@ -49,9 +51,17 @@ template = """
 금융 용어: 
 {term}
 
-👉설명: 
+<hr>
+<h3>💡<strong>{term}란? </strong></h3>  
 
-🕶️연관 검색어: 
+
+<h3>🔍<strong>연관 검색어</strong></h3>
+<ol>
+    <li> [연관검색어1]</li>  
+    <li> [연관검색어2]</li>  
+    <li> [연관검색어3]</li>
+</ol>
+<hr>
 """
 
 # Generate prompt
@@ -63,7 +73,6 @@ prompt = PromptTemplate(
 
 def format_retriever_output(docs):
     return "\n".join([doc.page_content for doc in docs])
-
 
 # Generate Chain
 chain = (
@@ -86,7 +95,6 @@ def explain_term():
     context_text = "\n".join([doc.page_content for doc in retrieved_docs])
     explanation = chain.invoke(term)
 
-    # 네이버 뉴스 검색
     news_items = fetch_naver_news(term)
     news_list = [{"title": news["title"], "link": news["link"]} for news in news_items]
 
