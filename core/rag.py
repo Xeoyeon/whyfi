@@ -1,4 +1,4 @@
-from db import db
+from .db import db
 
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser

@@ -1,4 +1,4 @@
-from langchain.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
 class ChromaDB:
@@ -7,3 +7,5 @@ class ChromaDB:
         self.vectorstore = Chroma(
             persist_directory="./chroma_index", embedding_function=self.embedding_model
         )
+
+db = ChromaDB()
