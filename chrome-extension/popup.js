@@ -9,7 +9,6 @@ document.getElementById("searchTerm").addEventListener("keydown", function(event
 });
 
 document.getElementById("clearBtn").addEventListener("click", function() {
-
     document.getElementById("searchTerm").value = "";
     this.style.display = "none";
 });
@@ -44,7 +43,6 @@ async function performSearch() {
         } else {
             newsDiv.innerHTML = "관련 뉴스가 없습니다.";
         }
-
         newsDiv.style.display = "block";
         
         // 검색 결과가 있으면 지우기 버튼 표시
@@ -55,6 +53,7 @@ async function performSearch() {
         resultDiv.innerHTML = "❌ 정보를 가져오는 중 오류 발생";
     }
 }
+
 
 
 
