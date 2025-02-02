@@ -1,4 +1,5 @@
 import os
+import random
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
@@ -30,7 +31,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
 def fetch_naver_news(query):
     client_id = os.getenv("NAVER_CLIENT_ID")
     client_secret = os.getenv("NAVER_CLIENT_SECRET")
-    url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display=3&sort=sim"
+    url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display=50&start=2&sort=sim"
     headers = {
         "X-Naver-Client-Id": client_id,
         "X-Naver-Client-Secret": client_secret,
@@ -41,10 +42,10 @@ def fetch_naver_news(query):
         news_items = response.json().get("items", [])
         if not news_items:
             return "관련 뉴스를 찾을 수 없습니다."
-
-        return "\n".join([f"- {item['title']} ({item['link']})" for item in news_items])
+        random_news = random.sample(news_items, min(3, len(news_items)))
+        return "\n".join([f"- {item['title']} ({item['link']})" for item in random_news])
     
-    return f"네이버 뉴스 API 요청 실패. 응답 코드: {response.status_code}"
+    return f"API 요청 실패: {response.status_code}"
 
 # Template
 template = """
@@ -58,9 +59,9 @@ template = """
 금융 용어:
 {term}
 
-👉설명: 
+💡{term}란?: 
 
-🕶️연관 검색어:
+🔍연관 검색어:
 """
 
 # Generate prompt
@@ -72,7 +73,6 @@ prompt = PromptTemplate(
 
 def format_retriever_output(docs):
     return "\n".join([doc.page_content for doc in docs])
-
 
 # Generate Chain
 chain = (
@@ -88,34 +88,28 @@ chain = (
 # Streamlit UI
 st.set_page_config(page_title="금융 용어 알리미", page_icon="💰", layout="wide")
 
-st.sidebar.title("📌 금융 용어 검색")
+st.sidebar.title("💰 금융 용어 알리미")
 user_input = st.sidebar.text_input("금융 용어를 입력하세요:", "")
 
 if user_input:
     st.sidebar.write("🔍 검색 중...")
 
-    # 뉴스 검색
     news_results = str(fetch_naver_news(user_input))
-
-    # 관련 문서 검색
     retrieved_docs = retriever.invoke(user_input)
     context_text = "\n".join([doc.page_content for doc in retrieved_docs])
 
-    # LLM 실행
     with st.spinner("🔄 정보를 분석하는 중..."):
         response = chain.invoke(user_input)
 
-    # 결과 출력
     st.title("📢 금융 용어 설명")
-    st.write(response)
+    st.markdown(response)
 
-    # 관련 뉴스 출력
     st.subheader("📰 관련 뉴스")
-    if "관련 뉴스를 찾을 수 없습니다." in news_results:
+    if not news_results:
         st.write("❌ 관련 뉴스를 찾을 수 없습니다.")
     else:
         for news in news_results.split("\n"):
             st.markdown(news)
 
 else:
-    st.info("🔍 금융 용어를 입력하고 설명을 받아보세요!")
+    st.info("🔍 금융 용어를 입력하세요!")
