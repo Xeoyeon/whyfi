@@ -1,7 +1,4 @@
-# pip install pytrends
-# pip install plotly
-
-from core import agent, fetch_naver_news, fetch_google_trends
+from core import agent, fetch_naver_news, fetch_google_trends, fetch_google_trends_by_region
 import streamlit as st
 from dotenv import load_dotenv
 import plotly.express as px 
@@ -9,8 +6,6 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
 load_dotenv()
-
-
 
 # Streamlit UI
 st.set_page_config(page_title="금융 용어 알리미", page_icon="💰", layout="wide")
@@ -45,5 +40,15 @@ if term:
         st.plotly_chart(fig)
     else:
         st.warning("⚠️ 트렌드 데이터를 찾을 수 없습니다.")
+
+    st.subheader(f"🌏 {term} 지역별 검색 트렌드")
+    with st.spinner("📊 지역별 트렌드 데이터 수집 중..."):
+        region_trends = fetch_google_trends_by_region(term)
+    if not region_trends.empty:
+        fig_region = px.bar(region_trends, x='Region', y='Trend Score', text='Trend Score')
+        fig_region.update_traces(textposition='outside')
+        st.plotly_chart(fig_region)
+    else:
+        st.warning("⚠️ 지역별 트렌드 데이터를 찾을 수 없습니다.")
 else:
     st.info("🔍 금융 용어를 입력하세요!")
