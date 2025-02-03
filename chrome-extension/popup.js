@@ -28,6 +28,7 @@ async function performSearch() {
     newsDiv.innerHTML = "";
 
     try {
+        // 실제 배포 시에는 api 링크만 변경하면 됨
         const response = await fetch("http://127.0.0.1:5000/explain?term=" + encodeURIComponent(term));
         const data = await response.json();
 
