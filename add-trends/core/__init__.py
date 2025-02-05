@@ -1,6 +1,6 @@
 from .news import fetch_naver_news
 from .trends import fetch_google_trends
-from .trends import fetch_google_trends_by_region
-from .rag import RAGAgent
+from .rag import RAGAgent_st, RAGAgent_ce
 
-agent = RAGAgent()
+agent_st = RAGAgent_st()
+agent_ce = RAGAgent_ce()
