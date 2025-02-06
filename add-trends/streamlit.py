@@ -1,6 +1,3 @@
-# pip install pytrends
-# pip install plotly
-
 from core import agent_st, fetch_naver_news, fetch_google_trends
 import streamlit as st
 from dotenv import load_dotenv
@@ -60,13 +57,15 @@ if term:
             news = f'<p><a href="{news_result["link"]}" style="color: gray;">{news_result["title"]}</a></p>'
             st.markdown(news, unsafe_allow_html=True)
     
-    st.subheader(f"📈 {term} 검색 트렌드")
     with st.spinner("📊 트렌드 데이터 수집 중..."):
-        trends_data = fetch_google_trends(term)
-    if not trends_data.empty:
-        fig = px.line(trends_data, x="Date", y="Trend Score")
-        st.plotly_chart(fig)
-    else:
-        st.warning("⚠️ 트렌드 데이터를 찾을 수 없습니다.")
+        try:
+            trends_data = fetch_google_trends(term)
+            if not trends_data.empty:
+                st.subheader(f"📈 {term} 검색 트렌드")
+                fig = px.line(trends_data, x="Date", y="Trend Score")
+                st.plotly_chart(fig)
+        except Exception as e:
+            st.warning("⚠️ 현재 트렌드 데이터를 가져올 수 없습니다. 나중에 다시 시도해 주세요.")
+
 else:
     st.info("🔍 금융 용어를 입력하세요!")
