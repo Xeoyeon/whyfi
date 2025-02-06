@@ -9,6 +9,8 @@
 - streamlit & chrome extension UI 변경
   - 서영님 markdown 참고해서 서비스 설명 추가
   - 기타 문구 변경
+
+(추가) pytrends 429 error : try-except 처리하여 오류 뜨더라도 나머지 결과는 출력되도록 수정
     
 ---
 
