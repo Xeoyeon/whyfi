@@ -53,7 +53,7 @@ async function performSearch() {
             newsDiv.innerHTML = "관련 뉴스가 없습니다.";
         }
 
-        if (data.trend) {
+        if (data.trend && data.trend.peak_date) {
             trendDiv.innerHTML = `
                 <ul>
                     <li>😞최저 관심도: ${data.trend.lowest_score} (📅 ${data.trend.lowest_date})</li>
@@ -63,9 +63,14 @@ async function performSearch() {
             `;
             trendDiv.style.display = "block";
             trendTitle.style.display = "block";
+            divider.style.display = "block";
+        } else {
+            trendDiv.innerHTML = "";
+            trendDiv.style.display = "none";    
+            trendTitle.style.display = "none";
+            divider.style.display = "none";
         }
         
-        divider.style.display = "block";
         clearBtn.style.display = "inline-block"; 
 
     } catch (error) {
