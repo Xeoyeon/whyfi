@@ -3,7 +3,6 @@ import streamlit as st
 from dotenv import load_dotenv
 import plotly.express as px 
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 
 load_dotenv()
 
