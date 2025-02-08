@@ -2,7 +2,7 @@ from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
 class ChromaDB:
-    def __init__(self, colleciton_name):
+    def __init__(self, collection_name):
         self.embedding_model = HuggingFaceEmbeddings(
                 model_name="dragonkue/BGE-m3-ko",
                 multi_process=False,
@@ -11,7 +11,7 @@ class ChromaDB:
                 # Set `True` for cosine similarity
             )
         self.vectorstore = Chroma(
-    collection_name=colleciton_name, persist_directory="./chroma_db", embedding_function=self.embedding_model
+    collection_name=collection_name, persist_directory="./chroma_db", embedding_function=self.embedding_model
     ) 
         
 db = ChromaDB("words700")
