@@ -9,24 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class RAGAgent:
-    def __init__(self):
+    def __init__(self, prompt_template):
         retriever = db.vectorstore.as_retriever(search_kwargs={"k": 5})
-        template = """
-        당신은 금융 전문가입니다.
-        사용자가 입력한 금융 용어를 누구나 이해하기 쉽고 간단하게 설명합니다. 필요하면 이해를 돕기 위한 예시도 설명에 포함합니다.
-        그리고 그 용어와 연관된 검색어 3개를 제공합니다. 
 
-        관련 정보:
-        {context}
-
-        금융 용어:
-        {term}
-
-        💡{term}란?: 
-
-        🔍연관 검색어:
-        """
-        prompt = PromptTemplate(input_variables=["context", "term"], template=template)
+        prompt = PromptTemplate(input_variables=["context", "term"], template=prompt_template)
 
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
         self.chain = (

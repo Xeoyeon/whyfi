@@ -26,7 +26,15 @@ button:hover {
     background-color: #00462A;
 }
 
-#result, #news {
+#result, #news, #trend {
     margin-top: 20px;
     text-align: left;
+}
+
+.subtitle {
+    font-size: 11px;
+    color: #000;
+    margin-top: -8px;
+    margin-bottom: 10px;
+    text-align: center;
 }
