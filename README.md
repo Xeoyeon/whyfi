@@ -2,7 +2,7 @@
 Euron 7기 와이파이(WhyFi) : 금융 용어 알리미 팀의 레포지토리입니다
 
 ### HuggingFace spaces에서 실행해보기
-👉 [Streamlit 앱 실행하기]([https://your-space-name.hf.space](https://huggingface.co/spaces/xeoyeon/whyfi))
+👉 [Streamlit 앱 실행하기](https://huggingface.co/spaces/xeoyeon/whyfi)
 
 ### streamlit 실행
 1. 
