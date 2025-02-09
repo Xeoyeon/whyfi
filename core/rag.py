@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
-
+from .gcp_utils import get_gemini_api_key, is_gcp_environment #GCP 환경 체크
 load_dotenv()
 
 class RAGAgent:
@@ -27,8 +27,8 @@ class RAGAgent:
         🔍연관 검색어:
         """
         prompt = PromptTemplate(input_variables=["context", "term"], template=template)
-
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+        api_key =get_gemini_api_key()
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",api_key=api_key)
         self.chain = (
             {
                 "context": retriever | self.format_retriever_output,
