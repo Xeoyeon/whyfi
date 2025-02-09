@@ -1,3 +1,8 @@
+# SQLite3 버전 문제 해결 코드
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 from core import agent, fetch_naver_news
 from core.trends import get_finance_trending_keywords
 import streamlit as st
