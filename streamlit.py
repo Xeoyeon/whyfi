@@ -1,5 +1,9 @@
-from core import agent, fetch_naver_news
+# SQLite3 버전 문제 해결 코드
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
+from core import agent, fetch_naver_news
 import streamlit as st
 from dotenv import load_dotenv
 
