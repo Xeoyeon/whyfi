@@ -1,8 +1,7 @@
 # whyfi
 Euron 7기 와이파이(WhyFi) : 금융 용어 알리미 팀의 레포지토리입니다
 
-### HuggingFace spaces에서 실행해보기
-👉 [Streamlit 앱 실행하기](https://huggingface.co/spaces/xeoyeon/whyfi)
+HuggingFace spaces에서 해당 앱을 실행해 볼 수 있습니다 👉 [WhyFi:금융용어알리미](https://huggingface.co/spaces/xeoyeon/whyfi)
 
 ### streamlit 실행
 1. 
