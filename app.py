@@ -1,4 +1,4 @@
-from core import ce_agent, fetch_naver_news, fetch_google_trends
+from core import ce_agent, fetch_naver_news, fetch_google_trends, fetch_popular_keywords
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -10,6 +10,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/explain", methods=["GET"])
 def explain_term():
+    keywords, _ = fetch_popular_keywords()
     term = request.args.get("term", "")
     if not term:
         return jsonify({"error": "금융 용어를 입력하세요."})
@@ -42,12 +43,14 @@ def explain_term():
         return jsonify({
             "explanation": explanation, 
             "news": news_items,
+            "keywords": keywords,
         })
     
     return jsonify({
         "explanation": explanation, 
         "news": news_items,
-        "trend": trend_summary
+        "trend": trend_summary,
+        "keywords": keywords,
     })
 
 if __name__ == "__main__":

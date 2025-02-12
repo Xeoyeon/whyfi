@@ -1,4 +1,4 @@
-from .db import db
+from .db import word_collection, book_collection
 
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -10,7 +10,8 @@ load_dotenv()
 
 class RAGAgent:
     def __init__(self, prompt_template):
-        retriever = db.vectorstore.as_retriever(search_kwargs={"k": 5})
+        retriever = word_collection.as_retriever(search_kwargs={"k": 3})
+        # retriever = book_collection.as_retriever(search_kwargs={"k": 2})
 
         prompt = PromptTemplate(input_variables=["context", "term"], template=prompt_template)
 

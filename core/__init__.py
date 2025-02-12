@@ -1,4 +1,4 @@
-from .utils import fetch_naver_news, fetch_google_trends
+from .utils import fetch_naver_news, fetch_google_trends, fetch_popular_keywords
 from .rag import RAGAgent
 from .prompt import streamlit_template, chrome_extension_template
 

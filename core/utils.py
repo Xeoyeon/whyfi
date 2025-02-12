@@ -3,6 +3,12 @@ import random
 import requests
 from pytrends.request import TrendReq
 import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+import re
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 # Function to fetch news from Naver API
 def fetch_naver_news(query):
@@ -35,3 +41,22 @@ def fetch_google_trends(term):
         return data[['Date','Trend Score']]
     else:
         return pd.DataFrame(columns=['Date','Trend Score'])
+
+
+def fetch_popular_keywords():
+    # setup driver
+    options = Options()
+    options.add_argument("--headless")  # 헤드리스 모드
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(1)
+    
+    # get keywords
+    url = 'https://eiec.kdi.re.kr/bigdata/issueTrend.do'   
+    driver.get(url)
+    data = driver.find_elements(By.CLASS_NAME, 'list_updown_issue.select')[2].text
+    driver.quit()
+
+    pattern = r'\n\d+|\d{4}\.\d+|[-=+,#/\?:.*\"~ㆍ!‘|\(\)\[\]`\'…》\”\“\’·]'
+    keywords= [word for word in re.sub(pattern, '', data).split('\n') if word and word != "NEW"]
+    date =(datetime.now()- relativedelta(months=1)).strftime("%Y.%m")
+    return keywords, date
