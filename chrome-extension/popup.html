@@ -1,22 +1,59 @@
+<!-- popup.html -->
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>금융 용어 알리미</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>💰금융 용어 알리미: WhyFi</h2>
-        <input type="text" id="searchTerm" placeholder="금융 용어를 입력하세요">
-        <button id="searchBtn">검색</button>
-        <button id="clearBtn" style="display: none;">지우기</button>
-        <div id="result"></div>
-        <h3 style="text-align: left;">📰관련 뉴스</h3>
-        <div id="news" style="display: none;"></div> 
+    <div class="header">
+        <span class="coin-icon">💰</span>
+        금융 용어 알리미: WhyFi
+    </div>
+    <div class="header-description">
+        WhyFi는 복잡한 금융 용어를 일상적인 언어로 설명하며 관련된 최신 뉴스 정보를 제공합니다.
     </div>
 
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchTerm" placeholder="금융 용어를 입력하세요">
+        <button class="btn-search" id="searchBtn">검색</button>
+    </div>
+
+    <div class="popular-keywords">
+        <div class="section-title">
+            <span>🔥</span>
+            인기 금융 키워드
+        </div>
+        <div id="popularKeywords"></div>
+    </div>
+
+    <div id="result" style="display: none;">
+        <div class="section">
+            <div class="section-title">
+                <span>💡</span>
+                설명
+            </div>
+            <div class="explanation" id="explanation"></div>
+        </div>
+
+        <div id="trendSection" class="section">
+            <div class="section-title">
+                <span>📈</span>
+                검색어 트렌드
+            </div>
+            <div class="explanation">
+                <div class="trend-summary" id="trend"></div>
+            </div>
+        </div>
+
+        <div id="newsSection" class="section">
+            <div class="section-title">
+                <span>📰</span>
+                관련 뉴스
+            </div>
+            <div id="news"></div>
+        </div>
+    </div>
     <script src="popup.js"></script>
 </body>
 </html>
