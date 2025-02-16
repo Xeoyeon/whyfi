@@ -10,20 +10,13 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/explain", methods=["GET"])
 def explain_term():
-    keywords, _ = fetch_popular_keywords()
     term = request.args.get("term", "")
     if not term:
         return jsonify({"error": "금융 용어를 입력하세요."})
+    
     explanation = ce_agent.invoke(term)
     news_items = fetch_naver_news(term)
-    
-    trend_summary = {
-        "average_score": "",
-        "peak_date": "",
-        "peak_score": "",
-        "lowest_date": "",
-        "lowest_score": ""
-    }
+    trend_summary = ""  # 기본값 설정
     
     try:
         trend = fetch_google_trends(term)
@@ -31,26 +24,28 @@ def explain_term():
             avg_trend = round(trend['Trend Score'].mean(), 2)
             peak_trend = trend.loc[trend['Trend Score'].idxmax()]
             lowest_trend = trend.loc[trend['Trend Score'].idxmin()]
-            trend_summary = {
-                "average_score": avg_trend,
-                "peak_date": peak_trend['Date'].strftime('%Y-%m-%d'),
-                "peak_score": int(peak_trend['Trend Score']),
-                "lowest_date": lowest_trend['Date'].strftime('%Y-%m-%d'),
-                "lowest_score": int(lowest_trend['Trend Score'])
-            }
+            
+            # 문자열로 가공
+            trend_summary = f"평균 관심도: {avg_trend}\n"
+            trend_summary += f"최고 관심도: {int(peak_trend['Trend Score'])} ({peak_trend['Date'].strftime('%Y-%m-%d')})\n"
+            trend_summary += f"최저 관심도: {int(lowest_trend['Trend Score'])} ({lowest_trend['Date'].strftime('%Y-%m-%d')})"
+            
     except Exception as e:
         print(f"Google Trends 데이터 가져오기 오류: {e}")
-        return jsonify({
-            "explanation": explanation, 
-            "news": news_items,
-            "keywords": keywords,
-        })
+        trend_summary = ""  # 에러 시 빈 문자열 설정
     
     return jsonify({
-        "explanation": explanation, 
+        "explanation": explanation,
         "news": news_items,
         "trend": trend_summary,
+    })
+
+@app.route("/keywords", methods=["GET"])  # POST에서 GET으로 변경
+def get_keywords():
+    keywords, date = fetch_popular_keywords()
+    return jsonify({
         "keywords": keywords,
+        "date": date,
     })
 
 if __name__ == "__main__":
