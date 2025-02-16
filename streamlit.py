@@ -26,7 +26,7 @@ if input_term != st.session_state.previous_term:
 
 # 인기 키워드
 keywords, date = fetch_popular_keywords()
-st.sidebar.markdown(f'<h4 style="font-size: 16px;">📊 금융 키워드 순위 ({date})</h4>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<h4 style="font-size: 16px;">📊 금융 키워드 순위 ({date[:4]}년 {date[5:]}월)</h4>', unsafe_allow_html=True)
 
 for i, keyword in enumerate(keywords):
     if keyword != "NEW":

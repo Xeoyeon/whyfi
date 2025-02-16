@@ -23,7 +23,10 @@ streamlit_template = """
 {term}
 
 관련 정보:
-{context}
+1. 한국은행 <경제금융용어 700선>에서 가져온 정보
+{word_context}
+2. 국세청 <2024 한권으로 OK 주식과 세금>에서 가져온 정보
+{book_context}
 
 단어의 의미, 활용 예시, 연관된 단어 3개를 제공해야 해. 형식은 아래와 같아:
 
@@ -44,7 +47,10 @@ chrome_extension_template = """
 {term}
 
 관련 정보:
-{context}
+1. 한국은행 <경제금융용어 700선>에서 가져온 정보
+{word_context}
+2. 국세청 <2024 한권으로 OK 주식과 세금>에서 가져온 정보
+{book_context}
 
 <hr>
 <h3>💡<b>{term}란? </b></h3>  [단어에 맞게 란? 또는 이란?으로 변경해줘.]
